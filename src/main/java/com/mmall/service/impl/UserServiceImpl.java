@@ -66,7 +66,7 @@ public class UserServiceImpl implements IUserService {
                 }
             }
             if (Const.EMAIL.equals(type)) {
-                int resultCount = userMapper.checkEmail(type);
+                int resultCount = userMapper.checkEmail(str);
                 if (resultCount > 0) {
                     return ServerResponse.createByErrorMessage("email已存在");
                 }
@@ -160,4 +160,14 @@ public class UserServiceImpl implements IUserService {
         }
         return ServerResponse.createByErrorMessage("更新个人信息失败");
      }
+
+    public ServerResponse<User> getInformation(Integer userId){
+        User user = userMapper.selectByPrimaryKey(userId);
+        if(user == null){
+            return ServerResponse.createByErrorMessage("找不到当前用户");
+        }
+        user.setPassword(org.apache.commons.lang3.StringUtils.EMPTY);
+        return ServerResponse.createBySuccess(user);
+
+    }
 }
